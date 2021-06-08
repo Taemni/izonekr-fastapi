@@ -6,6 +6,8 @@ Backend
 ```bash
 pip install fastapi
 pip install uvicorn[standard]
+pip install pymysql
+pip install python-dotenv
 ```
 2. Run
 ```bash
