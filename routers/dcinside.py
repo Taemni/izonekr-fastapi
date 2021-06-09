@@ -65,7 +65,7 @@ async def list(request: Request, gall_id: str, no: int):
     t = request.headers.get('X-TIMESTAMP')
 
     server_key = str(no) + generate_hash(t, gall_id)
-    if server_key != client_key or int(time.time()) - int(t) > 10:
+    if server_key != client_key or int(time.time()) - int(t) > 300:
         return JSONResponse(status_code=400, content={'result':False, 'message':'API key not valid. Please pass a valid API key.'})
 
     conn = get_connection(os.getenv('MYSQL_DATABASE_DC'))
