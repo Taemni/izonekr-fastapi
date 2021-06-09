@@ -24,7 +24,7 @@ class MailIn(BaseModel):
 Mail = APIRouter()
 
 @Mail.get("", summary="Get All Mail")
-async def get_mail(request: Request, q: Optional[str] = None, member: Optional[str] = None, date: Optional[str] = None, sort: Optional[str] = 'desc', birthday: Optional[str] = None, page: Optional[int] = 1):
+async def get_mail(request: Request, field: Optional[str] = None, q: Optional[str] = None, member: Optional[str] = None, date: Optional[str] = None, sort: Optional[str] = 'desc', birthday: Optional[str] = None, page: Optional[int] = 1):
     client_key = request.headers.get('X-API-KEY')
     t = request.headers.get('X-TIMESTAMP')
 
@@ -38,9 +38,9 @@ async def get_mail(request: Request, q: Optional[str] = None, member: Optional[s
     sql = "SELECT {} FROM private_mail where 1=1"
     sql_data = []
 
-    if q:
-        sql += " and (subject like %s or content like %s)"
-        sql_data.extend(["%"+q+"%", "%"+q+"%"])
+    if field in ['subject', 'content'] and q:
+        sql += " and {} like %s".format(field)
+        sql_data.append("%"+q+"%")
 
     if member:
         sql += " and member = %s"
